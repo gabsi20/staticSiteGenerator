@@ -1,0 +1,49 @@
+---
+layout: page
+title: Animation
+permalink: /ani/
+---
+<p>This is a funny animation, based on one of the examples on <a href="https://github.com/mbostock/d3/wiki/Gallery">the d3 homepage</a></p>
+
+
+<script>
+var mouse = [480, 250],
+    count = 0;
+var svg = d3.select(".post-content").append("svg")
+    .attr("width", 960)
+    .attr("height", 500);
+
+var g = svg.selectAll("g")
+    .data(d3.range(70))
+  .enter().append("g")
+    .attr("transform", "translate(" + mouse + ")");
+
+g.append("rect")
+    .attr("rx", 20)
+    .attr("ry", 10)
+    .attr("x", -12.5)
+    .attr("y", -12.5)
+    .attr("width", 25)
+    .attr("height", 25)
+    .attr("transform", function(d, i) { return "scale(" + (1 - d / 70) * 20 + ")"; })
+    .style("fill",function(d){ return "hsl("+d+",100%,"+d+"%)";});
+
+g.datum(function(d) {
+  return {center: mouse.slice(), angle: 0};
+});
+
+svg.on("mousemove", function() {
+  mouse = d3.mouse(this);
+});
+
+d3.timer(function() {
+  count++;
+  g.attr("transform", function(d, i) {
+    d.center[0] += (mouse[0] - d.center[0]) / (i + 5);
+    d.center[1] += (mouse[1] - d.center[1]) / (i + 5);
+    d.angle += Math.sin((count + i) / 50) * 5;
+    return "translate(" + d.center + ")rotate(" + d.angle + ")";
+  });
+});
+
+</script>

@@ -1,0 +1,73 @@
+---
+layout: page
+title: Music Notes
+permalink: /notes/
+---
+<p>By clicking the music lines you can add notes.</p>
+
+<script>
+        $(document).ready(function(){
+            var svg = initialize();
+            $('#svg').click(function(e){
+                var parentOffset = $(this).parent().offset(); 
+                var x = e.pageX - parentOffset.left;
+                var y = (parseInt((e.pageY - parentOffset.top)/5)*5)-40;
+            	svg.append("ellipse")
+                            .attr("fill", "black")
+                            .attr("cx", x)
+                            .attr("cy", y)
+                            .attr("rx", 7)
+                            .attr("ry", 5)
+                            .attr("transform", "rotate(-10,"+x+","+y+")");
+            	svg.append("ellipse")
+                            .attr("fill", "white")
+                            .attr("cx", x)
+                            .attr("cy", y)
+                            .attr("rx", 6)
+                            .attr("ry", 2)
+                            .attr("transform", "rotate(-10,"+x+","+y+")");
+            })
+        });
+        function initialize(){
+            var svg = d3.select(".post-content").append("svg")
+                .attr("width", 800)
+                .attr("height", 600)
+                .attr("id", "svg");
+
+            svg.append("line")
+                .attr("x1", 10)
+                .attr("y1", 30)
+                .attr("x2", 500)
+                .attr("y2", 30)
+                .attr("style", "stroke:rgb(0,0,0);stroke-width:1");
+
+            svg.append("line")
+                .attr("x1", 10)
+                .attr("y1", 40)
+                .attr("x2", 500)
+                .attr("y2", 40)
+                .attr("style", "stroke:rgb(0,0,0);stroke-width:1");
+
+            svg.append("line")
+                .attr("x1", 10)
+                .attr("y1", 50)
+                .attr("x2", 500)
+                .attr("y2", 50)
+                .attr("style", "stroke:rgb(0,0,0);stroke-width:1");
+
+            svg.append("line")
+                .attr("x1", 10)
+                .attr("y1", 60)
+                .attr("x2", 500)
+                .attr("y2", 60)
+                .attr("style", "stroke:rgb(0,0,0);stroke-width:1");
+
+            svg.append("line")
+                .attr("x1", 10)
+                .attr("y1", 70)
+                .attr("x2", 500)
+                .attr("y2", 70)
+                .attr("style", "stroke:rgb(0,0,0);stroke-width:1");
+            return svg;
+        }
+        </script>

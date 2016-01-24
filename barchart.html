@@ -1,0 +1,100 @@
+---
+layout: page
+title: BarChart
+permalink: /barchart/
+---
+<p>This barchart shows the top 10 Drivers and their Points</p>
+
+
+<script>
+	$(document).ready(function(){
+		results()
+	})
+
+
+	function results() {
+		fetch('http://ergast.com/api/fe/2015/1/results' + `.json?limit=10`)
+		.then(response => {
+			if (response.status >= 400) {
+				return console.log("error")
+			}
+			return response.json()
+		})
+		.then(data => {
+			draw(
+				convertData(data.MRData.RaceTable.Races[0].Results),
+				800,
+				600
+				)
+		})
+		.catch(err => {
+			console.log(err)
+		})
+	}
+	function convertData(results) {
+		return results.map(result => {
+			const points = parseInt(result.points)
+			const name = `${result.Driver.familyName} ${result.Driver.givenName}`
+			return {
+				name,
+				points
+			}
+		})
+	}
+	function draw(data, width = 800, height = 300) {
+		var margin = {top: 20, right: 20, bottom: 250, left: 40},
+		width = width - margin.left - margin.right,
+		height = height - margin.top - margin.bottom;
+		var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+		var y = d3.scale.linear().range([height, 0]);
+		var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+		.ticks(10)
+		var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("left")
+		.ticks(10);
+		var svg = d3.select(".post-content").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", 
+			"translate(" + margin.left + "," + margin.top + ")");
+
+		x.domain(data.map(function(d) { return d.name; }));
+		y.domain([0, d3.max(data, function(d) { return d.points; })]);
+
+		svg.append("g")
+		.attr("class", "x axis")
+		.attr("transform", "translate(0," + height + ")")
+		.call(xAxis)
+		.selectAll("text")
+		.style("text-anchor", "end")
+		.attr("dx", "-.8em")
+		.attr("dy", "-.55em")
+		.attr("transform", "rotate(-90)" );
+
+
+		svg.append("g")
+		.attr("class", "y axis")
+		.call(yAxis)
+		.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 6)
+		.attr("dy", ".71em")
+		.style("text-anchor", "end");
+
+
+		svg.selectAll("bar")
+		.data(data)
+		.enter().append("rect")
+		.style("fill", "darkred")
+		.attr("x", function(d) { return x(d.name); })
+		.attr("width", x.rangeBand())
+		.attr("y", function(d) { return y(d.points); })
+		.attr("height", function(d) { return height - y(d.points); });
+
+		}
+
+</script>
