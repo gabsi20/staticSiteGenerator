@@ -11,7 +11,7 @@ email: office@gabriel-alexander.at
 description: > # this means to ignore newlines until "baseurl:"
   On this pretty basic jekyll page, you will find my final submissions for
   cms course at FH-Salzburg.
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/staticSiteGenerator" # the subpath of your site, e.g. /blog
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 twitter_username: SbgGabriel
 github_username:  gabsi20
